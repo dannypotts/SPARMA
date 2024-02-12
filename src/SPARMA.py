@@ -70,7 +70,7 @@ def runServer(config):
     cmd = ["cd", str(config.gameFolder)]
     subprocess.run(cmd, check = True, shell = True)
 
-    cmd = ["arma3server_x64", "-name=server", "-config=server.cfg"]
+    cmd = [str(config.basePath / config.gameFolder) + "/arma3server_x64", "-name=server", "-config=server.cfg"]
     modstring = "-mod="
     for mod in config.modlist:
         modstring += "mods/" 
@@ -78,8 +78,7 @@ def runServer(config):
         modstring += ";"
 
     cmd.extend([modstring[:-1]])
-    
-    subprocess.run(cmd, check = True)
+    subprocess.run(cmd, check = True, cwd=str(config.basePath / config.gameFolder))
     return
 
 def runHeadless(config):
@@ -87,7 +86,7 @@ def runHeadless(config):
     cmd = ["cd", str(config.gameFolder)]
     subprocess.run(cmd, check = True, shell = True)
 
-    cmd = ["arma3server_x64", "-client", "-connect=127.0.0.1", f"-password={config.serverPassword}"]
+    cmd = [str(config.basePath / config.gameFolder) + "/arma3server_x64", "-client", "-connect=127.0.0.1", f"-password={config.serverPassword}"]
     modstring = "-mod="
     for mod in config.modlist:
         modstring += "mods/" 
@@ -95,8 +94,8 @@ def runHeadless(config):
         modstring += ";"
 
     cmd.extend([modstring[:-1]])
-    
-    subprocess.run(cmd, check = True)
+    os.chdir(config.basePath / config.gameFolder)
+    subprocess.run(cmd, check = True, cwd=str(config.basePath / config.gameFolder))
     return
 
 class CommandAction(enum.Enum):
