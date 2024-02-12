@@ -33,13 +33,13 @@ def updateServer(config):
 
     cmd.extend(["+quit"])
     #print(cmd)
-    '''
+    
     try:
         subprocess.run(cmd, check = True)
     except subprocess.CalledProcessError as e:
         print("Subprocess error:")
         print(e)
-    '''
+    
 
     logging.info("Updating symbolic links")
     # Make game mods folder if it doesn't exist
