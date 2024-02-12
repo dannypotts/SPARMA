@@ -22,6 +22,9 @@ def downloadMods(gameId, mods):
 def updateServer(config):
     logging.info("Updating via steam")
 
+    # needs refactoring
+    #
+    # Update
     cmd = [config.steamcmdPath]
     cmd.extend(["+force_install_dir", config.getGamePathStr()])
     cmd.extend(["+login", config.steamUser])
@@ -29,19 +32,43 @@ def updateServer(config):
 
     for mod in config.modlist:
         cmd.extend(["+workshop_download_item", str(config.gameId), str(mod.id)])
-        #cmd.extend(["validate"])
 
     cmd.extend(["+quit"])
     #print(cmd)
     
     try:
-        subprocess.run(cmd, check = True)
+        print(cmd)
+        #subprocess.run(cmd, check = True)
     except subprocess.CalledProcessError as e:
-        print("Subprocess error:")
+        print("Subprocess error when updating:")
         print(e)
         sys.exit(1)
     
+    #
+    # Validate
+    '''
+    logging.info("Validating")
+    cmd = [config.steamcmdPath]
+    cmd.extend(["+force_install_dir", config.getGamePathStr()])
+    cmd.extend(["+login", config.steamUser])
+    #cmd.extend(["+app_update", str(config.gameId), "validate"])
 
+    for mod in config.modlist:
+        cmd.extend(["+workshop_download_item", str(config.gameId), str(mod.id)])
+        cmd.extend(["validate"])
+
+    cmd.extend(["+quit"])
+    
+    try:
+        subprocess.run(cmd, check = True)
+    except subprocess.CalledProcessError as e:
+        print("Subprocess error when validating:")
+        print(e)
+        sys.exit(1)
+    '''
+
+    #
+    # Mod folder
     logging.info("Updating symbolic links")
     # Make game mods folder if it doesn't exist
     try:
@@ -50,6 +77,8 @@ def updateServer(config):
         pass
 
 
+    # 
+    # Each mod, unlink, rename files, link
     for mod in config.modlist:
         # needs shortening
         modLinkPath = config.basePath / config.gameFolder / Path("mods") / Path(str(mod.name))
