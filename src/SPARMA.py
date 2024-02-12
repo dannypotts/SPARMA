@@ -29,7 +29,7 @@ def updateServer(config):
 
     for mod in config.modlist:
         cmd.extend(["+workshop_download_item", str(config.gameId), str(mod.id)])
-        cmd.extend(["validate"])
+        #cmd.extend(["validate"])
 
     cmd.extend(["+quit"])
     #print(cmd)
@@ -39,6 +39,7 @@ def updateServer(config):
     except subprocess.CalledProcessError as e:
         print("Subprocess error:")
         print(e)
+        sys.exit(1)
     
 
     logging.info("Updating symbolic links")
@@ -62,12 +63,14 @@ def updateServer(config):
 
         # Rename all files (remove upper-case)
         #find . -depth -exec rename 's/(.*)\/([^\/]*)/$1\/\L$2/' {} \;
-        cmd = ["find", ".", "-depth", "-exec",  "rename", "'s/(.*)\/([^\/]*)/$1\/\L$2/'", "{}", "\;"]
-        subprocess.run(cmd, shell = True,  check = True, cwd = workshopPath)
+        #cmd = ["find", ".", "-depth", "-exec",  "rename", "'s/(.*)\/([^\/]*)/$1\/\L$2/'", "{}", "\;"]
+        #subprocess.run(cmd, shell = True,  check = True, cwd = workshopPath)
 
         # Link
         cmd = ["ln", "-s", workshopPath, modLinkPath]
         subprocess.run(cmd, check = True)
+
+    logging.info("Finished")
     return
 
 def runServer(config):
