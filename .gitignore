@@ -1,3 +1,10 @@
+# Config file
+SPARMA.yml
+
+# Testing
+arma3_server/*
+sparms_mods/*
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
