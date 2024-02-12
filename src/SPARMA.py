@@ -59,8 +59,13 @@ def updateServer(config):
             os.unlink(modLinkPath)
         except FileNotFoundError:
                 pass
-        # Link
 
+        # Rename all files (remove upper-case)
+        #find . -depth -exec rename 's/(.*)\/([^\/]*)/$1\/\L$2/' {} \;
+        cmd = ["find", ".", "-depth", "-exec",  "rename", "'s/(.*)\/([^\/]*)/$1\/\L$2/'", "{}", "\;"]
+        subprocess.run(cmd, shell = True,  check = True, cwd = workshopPath)
+
+        # Link
         cmd = ["ln", "-s", workshopPath, modLinkPath]
         subprocess.run(cmd, check = True)
     return
